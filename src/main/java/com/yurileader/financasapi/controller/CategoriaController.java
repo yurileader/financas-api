@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,7 +37,7 @@ public class CategoriaController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoriaDTO> cadastrar(@RequestBody CategoriaDTO categoriaDTO, HttpServletResponse response) {
+    public ResponseEntity<CategoriaDTO> cadastrar(@RequestBody @Valid CategoriaDTO categoriaDTO, HttpServletResponse response) {
         Categoria categoriaSalva = categoriaService.criar(toEntity(categoriaDTO));
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(categoriaSalva.getId()).toUri();
         response.setHeader("Location", uri.toASCIIString());
