@@ -5,11 +5,11 @@ import com.yurileader.financasapi.model.Categoria;
 import com.yurileader.financasapi.service.CategoriaService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletResponse;
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +33,15 @@ public class CategoriaController {
     @GetMapping("{id}")
     public ResponseEntity<CategoriaDTO> listarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(toDto(categoriaService.buscarPorId(id)));
+    }
+
+    @PostMapping
+    public ResponseEntity<CategoriaDTO> cadastrar(@RequestBody CategoriaDTO categoriaDTO, HttpServletResponse response) {
+        Categoria categoriaSalva = categoriaService.criar(toEntity(categoriaDTO));
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(categoriaSalva.getId()).toUri();
+        response.setHeader("Location", uri.toASCIIString());
+
+        return ResponseEntity.created(uri).body(toDto(categoriaSalva));
     }
 
     public Categoria toEntity(CategoriaDTO categoriaDTO) {
