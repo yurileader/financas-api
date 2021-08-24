@@ -23,4 +23,8 @@ public class PessoaService {
     public Pessoa buscarPorId(Long id) {
         return pessoaRepository.findById(id).orElseThrow(() -> new EmptyResultDataAccessException(1));
     }
+
+    public Pessoa criar(Pessoa pessoa) {
+        return pessoaRepository.save(pessoa);
+    }
 }
