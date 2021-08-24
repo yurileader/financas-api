@@ -1,17 +1,15 @@
 package com.yurileader.financasapi.dto;
 
+import com.yurileader.financasapi.model.Endereco;
 import lombok.Data;
+
+import javax.persistence.Embedded;
 
 @Data
 public class PessoaDTO {
 
     private String nome;
-    private String logradouro;
-    private String numero;
-    private String complemento;
-    private String bairro;
-    private String cep;
-    private String cidade;
-    private String estado;
+    @Embedded
+    private Endereco endereco;
     private boolean ativo;
 }

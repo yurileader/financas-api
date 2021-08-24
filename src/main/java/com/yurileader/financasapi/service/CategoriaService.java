@@ -24,7 +24,6 @@ public class CategoriaService {
         return categoriaRepository.findById(id).orElseThrow(() -> new EmptyResultDataAccessException(1));
     }
 
-
     public Categoria criar(Categoria categoria) {
         return categoriaRepository.save(categoria);
     }
