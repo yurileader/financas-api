@@ -1,10 +1,13 @@
 package com.yurileader.financasapi.config.exceptionhandler;
 
+import com.yurileader.financasapi.config.exceptionhandler.exceptions.PessoaAtivaException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class FinancasExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -48,6 +52,13 @@ public class FinancasExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         List<Erro> erros = criarListaErros(ex.getBindingResult());
         return handleExceptionInternal(ex, erros, headers, HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler({PessoaAtivaException.class})
+    protected ResponseEntity<Object> handlePessoaAtivaException(PessoaAtivaException ex, WebRequest request) {
+        var mensagemUsuario = messageSource.getMessage("pessoa-ativa", null, LocaleContextHolder.getLocale());
+        var mensagemDesenvolvedor = ex.toString();
+         return handleExceptionInternal(ex, new Erro(mensagemUsuario, mensagemDesenvolvedor), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     private List<Erro> criarListaErros(BindingResult bindingResult) {
