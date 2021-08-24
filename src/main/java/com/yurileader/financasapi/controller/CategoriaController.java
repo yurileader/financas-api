@@ -1,16 +1,18 @@
 package com.yurileader.financasapi.controller;
 
+import com.yurileader.financasapi.config.event.RecursoCriadoEvent;
 import com.yurileader.financasapi.dto.CategoriaDTO;
 import com.yurileader.financasapi.model.Categoria;
 import com.yurileader.financasapi.service.CategoriaService;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,12 +20,15 @@ import java.util.stream.Collectors;
 @RequestMapping("/categorias")
 public class CategoriaController {
 
+    @Autowired
+    private ModelMapper modelMapper;
+    @Autowired
+    private ApplicationEventPublisher publisher;
     private final CategoriaService categoriaService;
-    private final ModelMapper modelMapper;
 
-    public CategoriaController(CategoriaService categoriaService, ModelMapper modelMapper) {
+
+    public CategoriaController(CategoriaService categoriaService) {
         this.categoriaService = categoriaService;
-        this.modelMapper = modelMapper;
     }
 
     @GetMapping
@@ -39,10 +44,9 @@ public class CategoriaController {
     @PostMapping
     public ResponseEntity<CategoriaDTO> cadastrar(@RequestBody @Valid CategoriaDTO categoriaDTO, HttpServletResponse response) {
         Categoria categoriaSalva = categoriaService.criar(toEntity(categoriaDTO));
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(categoriaSalva.getId()).toUri();
-        response.setHeader("Location", uri.toASCIIString());
+        publisher.publishEvent(new RecursoCriadoEvent(this, response, categoriaSalva.getId()));
 
-        return ResponseEntity.created(uri).body(toDto(categoriaSalva));
+        return ResponseEntity.status(HttpStatus.CREATED).body(toDto(categoriaSalva));
     }
 
     public Categoria toEntity(CategoriaDTO categoriaDTO) {

@@ -1,18 +1,19 @@
 package com.yurileader.financasapi.controller;
 
+import com.yurileader.financasapi.config.event.RecursoCriadoEvent;
 import com.yurileader.financasapi.dto.PessoaDTO;
 import com.yurileader.financasapi.dto.PessoaDTOInput;
 import com.yurileader.financasapi.model.Pessoa;
 import com.yurileader.financasapi.service.PessoaService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,8 @@ public class PessoaController {
 
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private ApplicationEventPublisher publisher;
     private final PessoaService pessoaService;
 
     public PessoaController(PessoaService pessoaService) {
@@ -41,10 +44,9 @@ public class PessoaController {
     @PostMapping
     public ResponseEntity<PessoaDTOInput> cadastrar(@RequestBody @Valid PessoaDTOInput pessoaDTOInput, HttpServletResponse response) {
         Pessoa pessoaSalva = pessoaService.criar(toEntity(pessoaDTOInput));
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(pessoaSalva.getId()).toUri();
-        response.setHeader("Location", uri.toASCIIString());
+        publisher.publishEvent(new RecursoCriadoEvent(this, response, pessoaSalva.getId()));
 
-        return ResponseEntity.created(uri).body(toDtoInput(pessoaSalva));
+        return ResponseEntity.status(HttpStatus.CREATED).body(toDtoInput(pessoaSalva));
     }
 
     private PessoaDTO toDto(Pessoa pessoa) {
