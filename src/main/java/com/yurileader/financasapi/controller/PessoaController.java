@@ -49,6 +49,11 @@ public class PessoaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(toDtoInput(pessoaSalva));
     }
 
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable Long id){
+        pessoaService.excluir(id);
+    }
     private PessoaDTO toDto(Pessoa pessoa) {
         return modelMapper.map(pessoa, PessoaDTO.class);
     }

@@ -1,5 +1,6 @@
 package com.yurileader.financasapi.service;
 
+import com.yurileader.financasapi.config.exceptionhandler.exceptions.PessoaAtivaException;
 import com.yurileader.financasapi.model.Pessoa;
 import com.yurileader.financasapi.repository.PessoaRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -26,5 +27,14 @@ public class PessoaService {
 
     public Pessoa criar(Pessoa pessoa) {
         return pessoaRepository.save(pessoa);
+    }
+
+    public void excluir(Long id) {
+        Pessoa pessoaSalva = buscarPorId(id);
+        if (pessoaSalva.isInativo()){
+            pessoaRepository.deleteById(id);
+            return;
+        }
+        throw new PessoaAtivaException();
     }
 }
