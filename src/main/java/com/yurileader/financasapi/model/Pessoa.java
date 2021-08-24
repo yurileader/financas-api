@@ -17,4 +17,8 @@ public class Pessoa {
     private Endereco endereco;
     private boolean ativo;
 
+    @Transient
+    public boolean isInativo() {
+        return !ativo;
+    }
 }
