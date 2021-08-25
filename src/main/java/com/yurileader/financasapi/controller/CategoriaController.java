@@ -49,6 +49,13 @@ public class CategoriaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(toDto(categoriaSalva));
     }
 
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable Long id) {
+        categoriaService.excluir(id);
+    }
+
+
     public Categoria toEntity(CategoriaDTO categoriaDTO) {
         return modelMapper.map(categoriaDTO, Categoria.class);
     }
