@@ -51,9 +51,22 @@ public class PessoaController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletar(@PathVariable Long id){
+    public void deletar(@PathVariable Long id) {
         pessoaService.excluir(id);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PessoaDTOInput> atualizar(@PathVariable Long id, @RequestBody @Valid PessoaDTOInput pessoaDTOInput) {
+        Pessoa pessoaEntity = pessoaService.atualizarPessoa(id, toEntity(pessoaDTOInput));
+        return ResponseEntity.ok(toDtoInput(pessoaEntity));
+    }
+
+    @PutMapping("/{id}/ativo")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void atualizarPropriedadeAtivo(@PathVariable Long id, @RequestBody @Valid  Boolean ativo) {
+        pessoaService.atualizarAtivo(id, ativo);
+    }
+
     private PessoaDTO toDto(Pessoa pessoa) {
         return modelMapper.map(pessoa, PessoaDTO.class);
     }
