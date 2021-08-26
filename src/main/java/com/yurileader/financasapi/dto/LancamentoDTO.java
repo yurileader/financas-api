@@ -13,6 +13,7 @@ public class LancamentoDTO {
     private LocalDate dataVencimento;
     private LocalDate dataPagamento;
     private BigDecimal valor;
+    private String observacao;
     private TipoLancamento tipo;
     private CategoriaDTO categoria;
     private PessoaDTO pessoa;
