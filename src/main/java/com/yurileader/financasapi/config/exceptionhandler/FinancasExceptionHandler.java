@@ -1,6 +1,7 @@
 package com.yurileader.financasapi.config.exceptionhandler;
 
 import com.yurileader.financasapi.config.exceptionhandler.exceptions.PessoaAtivaException;
+import com.yurileader.financasapi.config.exceptionhandler.exceptions.PessoaInativaOuInexistente;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -66,6 +67,14 @@ public class FinancasExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({DataIntegrityViolationException.class})
     protected ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
         var mensagemUsuario = messageSource.getMessage("recurso-nao-permitido", null, LocaleContextHolder.getLocale());
+        var mensagemDesenvolvedor = ExceptionUtils.getRootCause(ex).toString();
+        List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+        return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler({PessoaInativaOuInexistente.class})
+    protected ResponseEntity<Object> handlePessoaInativaOuInexistente (PessoaInativaOuInexistente ex, WebRequest request){
+        var mensagemUsuario = messageSource.getMessage("pessoa-inativa-ou-inexistente", null, LocaleContextHolder.getLocale());
         var mensagemDesenvolvedor = ExceptionUtils.getRootCause(ex).toString();
         List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
         return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
