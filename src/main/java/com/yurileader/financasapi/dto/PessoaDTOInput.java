@@ -10,6 +10,7 @@ import javax.validation.constraints.NotEmpty;
 @Data
 public class PessoaDTOInput {
 
+    private Long id;
     @NotEmpty
     @NotBlank
     private String nome;
