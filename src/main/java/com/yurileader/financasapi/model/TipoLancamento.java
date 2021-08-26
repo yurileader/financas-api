@@ -1,2 +1,6 @@
-package com.yurileader.financasapi.model;public enum TipoLancamento {
+package com.yurileader.financasapi.model;
+
+public enum TipoLancamento {
+    RECEITA,
+    DESPEZA
 }
