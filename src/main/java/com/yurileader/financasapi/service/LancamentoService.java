@@ -5,21 +5,19 @@ import com.yurileader.financasapi.model.Lancamento;
 import com.yurileader.financasapi.model.Pessoa;
 import com.yurileader.financasapi.repository.LancamentoRepository;
 import com.yurileader.financasapi.repository.PessoaRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class LancamentoService {
 
     private final LancamentoRepository lancamentoRepository;
     private final PessoaRepository pessoaRepository;
 
-    public LancamentoService(LancamentoRepository lancamentoRepository, PessoaRepository pessoaRepository) {
-        this.lancamentoRepository = lancamentoRepository;
-        this.pessoaRepository = pessoaRepository;
-    }
 
     public Page<Lancamento> buscarTodos(Pageable pageable) {
         return lancamentoRepository.findAll(pageable);

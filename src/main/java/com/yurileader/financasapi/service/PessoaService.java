@@ -3,6 +3,7 @@ package com.yurileader.financasapi.service;
 import com.yurileader.financasapi.config.exceptionhandler.exceptions.PessoaAtivaException;
 import com.yurileader.financasapi.model.Pessoa;
 import com.yurileader.financasapi.repository.PessoaRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -10,13 +11,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PessoaService {
 
     private final PessoaRepository pessoaRepository;
 
-    public PessoaService(PessoaRepository pessoaRepository) {
-        this.pessoaRepository = pessoaRepository;
-    }
 
     public List<Pessoa> buscarTodos() {
         return pessoaRepository.findAll();

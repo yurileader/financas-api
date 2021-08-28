@@ -2,19 +2,18 @@ package com.yurileader.financasapi.service;
 
 import com.yurileader.financasapi.model.Categoria;
 import com.yurileader.financasapi.repository.CategoriaRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CategoriaService {
 
     private final CategoriaRepository categoriaRepository;
 
-    public CategoriaService(CategoriaRepository categoriaRepository) {
-        this.categoriaRepository = categoriaRepository;
-    }
 
     public List<Categoria> buscarTodos() {
         return categoriaRepository.findAll();
