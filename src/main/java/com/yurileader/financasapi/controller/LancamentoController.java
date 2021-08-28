@@ -8,14 +8,16 @@ import com.yurileader.financasapi.service.LancamentoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/lancamentos")
@@ -33,8 +35,10 @@ public class LancamentoController {
     }
 
     @GetMapping
-    public List<LancamentoDTO> listarTodos() {
-        return toDtoList(lancamentoService.buscarTodos());
+    public Page<LancamentoDTO> listarTodos(@PageableDefault(size = 5) Pageable pageable) {
+        Page<LancamentoDTO> lancamentos = lancamentoService.buscarTodos(pageable)
+                .map(this::toDto);
+        return new PageImpl<>(lancamentos.getContent(), pageable, lancamentos.getTotalElements());
     }
 
     @GetMapping("/{id}")
@@ -58,9 +62,5 @@ public class LancamentoController {
     }
     private Lancamento toEntity(LancamentoDTOInput lancamentoDTOInput) {
         return modelMapper.map(lancamentoDTOInput, Lancamento.class);
-    }
-    private List<LancamentoDTO> toDtoList(List<Lancamento> lancamentos) {
-        return lancamentos.stream().map(lancamento -> toDto(lancamento))
-                .collect(Collectors.toList());
     }
 }
