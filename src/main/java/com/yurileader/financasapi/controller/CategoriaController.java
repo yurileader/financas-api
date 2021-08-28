@@ -4,6 +4,7 @@ import com.yurileader.financasapi.config.event.RecursoCriadoEvent;
 import com.yurileader.financasapi.dto.CategoriaDTO;
 import com.yurileader.financasapi.model.Categoria;
 import com.yurileader.financasapi.service.CategoriaService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/categorias")
 public class CategoriaController {
@@ -27,9 +29,7 @@ public class CategoriaController {
     private final CategoriaService categoriaService;
 
 
-    public CategoriaController(CategoriaService categoriaService) {
-        this.categoriaService = categoriaService;
-    }
+
 
     @GetMapping
     public List<CategoriaDTO> listarTodos() {
@@ -70,3 +70,4 @@ public class CategoriaController {
                 .collect(Collectors.toList());
     }
 }
+

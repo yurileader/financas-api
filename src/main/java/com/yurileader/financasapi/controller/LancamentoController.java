@@ -5,6 +5,7 @@ import com.yurileader.financasapi.dto.LancamentoDTO;
 import com.yurileader.financasapi.dto.LancamentoDTOInput;
 import com.yurileader.financasapi.model.Lancamento;
 import com.yurileader.financasapi.service.LancamentoService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/lancamentos")
 public class LancamentoController {
@@ -30,9 +32,6 @@ public class LancamentoController {
 
     private final LancamentoService lancamentoService;
 
-    public LancamentoController(LancamentoService lancamentoService) {
-        this.lancamentoService = lancamentoService;
-    }
 
     @GetMapping
     public Page<LancamentoDTO> listarTodos(@PageableDefault(size = 5) Pageable pageable) {
@@ -57,9 +56,11 @@ public class LancamentoController {
     private LancamentoDTO toDto(Lancamento lancamento) {
         return modelMapper.map(lancamento, LancamentoDTO.class);
     }
+
     private LancamentoDTOInput toDtoInput(Lancamento lancamento) {
         return modelMapper.map(lancamento, LancamentoDTOInput.class);
     }
+
     private Lancamento toEntity(LancamentoDTOInput lancamentoDTOInput) {
         return modelMapper.map(lancamentoDTOInput, Lancamento.class);
     }

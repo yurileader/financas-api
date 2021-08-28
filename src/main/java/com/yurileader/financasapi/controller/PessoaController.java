@@ -5,6 +5,7 @@ import com.yurileader.financasapi.dto.PessoaDTO;
 import com.yurileader.financasapi.dto.PessoaDTOInput;
 import com.yurileader.financasapi.model.Pessoa;
 import com.yurileader.financasapi.service.PessoaService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -17,6 +18,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/pessoas")
 public class PessoaController {
@@ -27,9 +29,6 @@ public class PessoaController {
     private ApplicationEventPublisher publisher;
     private final PessoaService pessoaService;
 
-    public PessoaController(PessoaService pessoaService) {
-        this.pessoaService = pessoaService;
-    }
 
     @GetMapping
     public List<PessoaDTO> listarTodos() {
@@ -63,7 +62,7 @@ public class PessoaController {
 
     @PutMapping("/{id}/ativo")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void atualizarPropriedadeAtivo(@PathVariable Long id, @RequestBody @Valid  Boolean ativo) {
+    public void atualizarPropriedadeAtivo(@PathVariable Long id, @RequestBody @Valid Boolean ativo) {
         pessoaService.atualizarAtivo(id, ativo);
     }
 
