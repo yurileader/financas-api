@@ -15,7 +15,7 @@
 Financas-API  é uma aplicação full stack web construída durante o curso da AlgaWorks FullStack ANGULAR + SPRING.
 
 #### A aplicação consiste em gerenciar os gastos e receitas, com controle e consultas onde os dados futuramente iram ser apresentados em um dashboard com gráficos baseados nestes dados.
-Table of contents
+Tabela de conteúdos
 =================
 <p align="center">
 <a href="#categorias">Categorias </a> •
